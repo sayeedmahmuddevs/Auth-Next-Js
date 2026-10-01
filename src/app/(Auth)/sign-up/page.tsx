@@ -24,6 +24,7 @@ function SignUpPage() {
       name: data.name as string,
       email: data.email as string, 
       password: data.password as string, 
+      callbackURL: "/sign-in",
     });
     console.log("resData", resData, "error", error);
   };

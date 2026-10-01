@@ -1,5 +1,6 @@
 "use client";
 
+import { signIn } from "@/lib/auth.client";
 // import {Check} from "@gravity-ui/icons";
 import {
   Button,
@@ -12,12 +13,17 @@ import {
 } from "@heroui/react";
 
 function SignInPage() {
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
-
-    console.log("ResData", data);
+    const {data:resData, error} = await signIn.email({
+      email: data.email as string,
+      password: data.password as string,
+      callbackURL: "/",
+    });
+    console.log("resData", resData, "error", error);
+    
   };
 
   return (
