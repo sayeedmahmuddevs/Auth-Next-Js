@@ -1,6 +1,7 @@
 "use client";
 
-// import {Check} from "@gravity-ui/icons";
+import { signUp } from "@/lib/auth.client";
+
 import {
   Button,
   Description,
@@ -12,33 +13,40 @@ import {
 } from "@heroui/react";
 
 function SignUpPage() {
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
 
     console.log("ResData", data);
+
+    const { data: resData, error } = await signUp.email({
+      name: data.name as string,
+      email: data.email as string, 
+      password: data.password as string, 
+    });
+    console.log("resData", resData, "error", error);
   };
 
   return (
-    <div className = "flex min-h-screen flex-col items-center justify-center gap-4 bg-gray-500 p-4 font-sans dark:bg-black ">
-      <h1 className = "text-2xl font-bold ">Sign Up</h1>
+    <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-gray-500 p-4 font-sans dark:bg-black ">
+      <h1 className="text-2xl font-bold ">Sign Up</h1>
 
       <Form className="flex w-96 flex-col gap-4" onSubmit={onSubmit}>
         <TextField
-            isRequired
-            name="name"
-            validate={(value) => {
-              if (value.length < 3) {
-                return "Name must be at least 3 characters";
-              }
-              return null;
-            }}
-          >
-            <Label>Name</Label>
-            <Input placeholder="John Doe" />
-            <FieldError />
-          </TextField>
+          isRequired
+          name="name"
+          validate={(value) => {
+            if (value.length < 3) {
+              return "Name must be at least 3 characters";
+            }
+            return null;
+          }}
+        >
+          <Label>Name</Label>
+          <Input placeholder="John Doe" />
+          <FieldError />
+        </TextField>
         <TextField
           isRequired
           name="email"
@@ -52,7 +60,7 @@ function SignUpPage() {
         >
           <Label>Email</Label>
           <Input placeholder="john@example.com" />
-          <FieldError/>
+          <FieldError />
         </TextField>
         <TextField
           isRequired
